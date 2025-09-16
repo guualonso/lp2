@@ -4,13 +4,13 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+
 
 import lombok.Getter;
 import lombok.Setter;
@@ -25,11 +25,8 @@ import teste.service.ManterDisciplinaService;
 @Setter
 @Named
 @ViewScoped
-public class ManterCursoBean implements Serializable{
+public class ManterCursoBean implements Serializable {
 	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	@Inject
@@ -39,13 +36,17 @@ public class ManterCursoBean implements Serializable{
 
 	@Inject
 	private ManterCursoService manterCursoService;
-	private Curso curso = new Curso();
-	private List<Curso> cursos = new ArrayList<Curso>();	
 	
+	private Curso curso = new Curso();
+	private List<Curso> cursos = new ArrayList<>();
+	
+	// Novo atributo para armazenar o curso selecionado na tabela
+	private Curso cursoSelecionado;
+
 	@PostConstruct
 	public void inicializar() {
-		this.setCursos(manterCursoService.buscarTodos());
-    	this.setDisciplinas(manterDisciplinaService.buscarTodos());
+		this.cursos = manterCursoService.buscarTodos();
+    	this.disciplinas = manterDisciplinaService.buscarTodos();
     	limpar();
 	}
 	
@@ -79,12 +80,17 @@ public class ManterCursoBean implements Serializable{
 	}
 		
 	public void limpar() {
-
 		this.curso = new Curso();
 	}
 
+	public void onCursoNomeClick(Curso cursoSelecionado) {
+		this.cursoSelecionado = cursoSelecionado;
 
-
-
-	
+		if (cursoSelecionado != null) {
+			log.info("Curso selecionado: " + cursoSelecionado.getNome());
+			FacesContext.getCurrentInstance().addMessage(null,
+				new FacesMessage(FacesMessage.SEVERITY_INFO,
+					"Curso selecionado: " + cursoSelecionado.getNome(), null));
+		}
+	}
 }

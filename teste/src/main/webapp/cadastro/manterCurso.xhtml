@@ -15,7 +15,6 @@
 
       <p:growl id="growl" showDetail="false" />
 
-      <!-- Toolbar -->
       <p:toolbar style="margin-top: 20px">
         <p:toolbarGroup>
           <p:commandButton icon="pi pi-plus" value="Novo" 
@@ -24,27 +23,26 @@
         </p:toolbarGroup>
       </p:toolbar>
 
-      <!-- Tabela de cursos -->
       <p:dataTable id="cursosTable" var="curso" value="#{manterCursoBean.cursos}" 
-                   lazy="false" showGridlines="true" 
-                   style="margin-top: 20px" emptyMessage="Nenhum curso cadastrado." 
-                   rows="10" paginator="true" paginatorAlwaysVisible="true" 
-                   paginatorPosition="bottom" rowsPerPageTemplate="5,10,15">
+             style="margin-top: 20px" emptyMessage="Nenhum curso cadastrado."
+             rows="10" paginator="true" paginatorAlwaysVisible="true"
+             paginatorPosition="bottom" rowsPerPageTemplate="5,10,15">
 
-        <p:column headerText="Id" style="width: 40px; text-align: center">
-          <h:outputText value="#{curso.id}" />
-        </p:column>
+          <p:column headerText="Id" style="width: 40px; text-align: center">
+              <h:outputText value="#{curso.id}" />
+          </p:column>
 
-        <p:column headerText="Nome" style="width: 350px; text-align: left" 
-                  filterBy="#{curso.nome}">
-          <h:outputText value="#{curso.nome}" />
-        </p:column>
+          <p:column headerText="Nome" style="width: 350px; text-align: left">
+              <p:commandLink value="#{curso.nome}" style="text-decoration:none; color: inherit;" process="@this"
+                            update=":formulario:disciplinasPanel :formulario:growl"
+                            actionListener="#{manterCursoBean.onCursoNomeClick(curso)}" />
+          </p:column>
 
-        <p:column headerText="Disciplinas" style="width: 350px; text-align: left">
-          <h:outputText value="#{curso.disciplinasFormatadas}" />
-        </p:column>
+          <p:column headerText="Disciplinas" style="width: 350px; text-align: left">
+              <h:outputText value="#{curso.disciplinasFormatadas}" />
+          </p:column>
 
-        <p:column headerText="Operações" style="width: 80px; text-align: center">
+          <p:column headerText="Operações" style="width: 80px; text-align: center">
           <p:commandButton icon="pi pi-pencil" title="Editar"
                            oncomplete="PF('editarDialogWidgetVar').show()"
                            update=":formulario:editarDialog" process="@this">
@@ -56,10 +54,18 @@
             <f:setPropertyActionListener target="#{manterCursoBean.curso}" value="#{curso}" />
           </p:commandButton>
         </p:column>
-
       </p:dataTable>
 
-      <!-- Dialog de edição -->
+      <p:panel id="disciplinasPanel" header="Disciplinas do Curso Selecionado" 
+              style="margin-top:20px" toggleable="true">
+
+          <p:dataList value="#{manterCursoBean.cursoSelecionado.disciplinas}" var="d" 
+                      type="unordered">
+              <h:outputText value="#{d.nome}" />
+          </p:dataList>
+
+      </p:panel>
+
       <p:dialog id="editarDialog" header="Curso" widgetVar="editarDialogWidgetVar"
                 modal="true" resizable="true" closeOnEscape="true"
                 width="70%" position="center top" maximizable="true"
@@ -87,7 +93,6 @@
         </p:panelGrid>
       </p:dialog>
 
-      <!-- Dialog de confirmação de exclusão -->
       <p:confirmDialog id="confirmacaoExclusaoDialog" widgetVar="confirmacaoExclusao"
                        message="Tem certeza que deseja excluir o curso #{manterCursoBean.curso.nome}?"
                        header="Exclusão de curso" severity="alert">
