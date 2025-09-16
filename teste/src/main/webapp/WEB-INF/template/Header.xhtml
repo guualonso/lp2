@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+ 	  xmlns:h="http://xmlns.jcp.org/jsf/html"
+ 	  xmlns:f="http://xmlns.jcp.org/jsf/core"
+ 	  xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	  xmlns:p="http://primefaces.org/ui">
+	
+	<body>
+		<ui:composition>			
+			<header>					
+				<div class="card">
+					<h:form>
+					
+						<p:growl id="growl" showDetail="true" />
+																
+						<p:menubar>
+							<f:facet name="start">
+				                <p:graphicImage name="imagens/primefaces_logo.svg" />
+				            </f:facet>
+							<p:menuitem value="Home" url="http://localhost:8080/teste"/>
+							<p:menuitem icon="pi pi-sparkles" value="Cadastro de Aluno" outcome="/cadastro/manterAluno.xhtml" />
+							<p:menuitem icon="pi pi-sparkles" value="Cadastro de Curso" outcome="/cadastro/manterCurso.xhtml" />
+							<p:menuitem icon="pi pi-sparkles" value="Cadastro de Disciplina" outcome="/cadastro/manterDisciplina.xhtml" />
+							<p:menuitem icon="pi pi-prime" value="Primefaces" url="https://www.primefaces.org/showcase" />
+								
+							<p:divider layout="vertical"/>
+				            <p:menuitem value="Sair" icon="pi pi-fw pi-power-off"/>
+						</p:menubar>
+					
+					</h:form>					
+				</div>			
+			</header>		
+		</ui:composition>		
+	</body>
+</html>
