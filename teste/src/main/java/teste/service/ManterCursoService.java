@@ -31,7 +31,15 @@ public class ManterCursoService implements Serializable{
 	}
 	
 	public void excluir(Curso curso) {
-		this.cursoDao.excluir(curso);
+		Curso cursoComDisciplinas = cursoDao.buscarPeloCodigo(curso.getId());
+
+		if (cursoComDisciplinas.getDisciplinas() != null &&
+			!cursoComDisciplinas.getDisciplinas().isEmpty()) {
+			
+			throw new RuntimeException("Não é possível excluir. Existem disciplinas associadas ao curso.");
+		}
+
+		cursoDao.excluir(cursoComDisciplinas);
 	}
 
     public List<Curso> buscarTodos() {

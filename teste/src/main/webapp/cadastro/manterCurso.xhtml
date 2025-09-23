@@ -86,10 +86,10 @@
           </p:selectManyMenu>
 
           <p:commandButton icon="pi pi-save" id="salvarButton"
-                           value="Salvar" title="Grava dados do Curso"
-                           actionListener="#{manterCursoBean.salvar}"
-                           oncomplete="if (!args.validationFailed) PF('editarDialogWidgetVar').hide()"
-                           update="growl cursosTable" process="@this grid" />
+                 value="Salvar" title="Grava dados do Curso"
+                 actionListener="#{manterCursoBean.salvar}"
+                 oncomplete="if (!args.validationFailed) { PF('editarDialogWidgetVar').hide(); PF('growl').show(); }"
+                 update="growl cursosTable" process="@this grid" />
         </p:panelGrid>
       </p:dialog>
 
@@ -98,10 +98,11 @@
                        header="Exclusão de curso" severity="alert">
         <p:button icon="pi pi-thumbs-down" value="Não"
                   onclick="PF('confirmacaoExclusao').hide(); return false;" process="@this"/>
-        <p:commandButton icon="pi pi-thumbs-up" value="Sim" 
-                         update=":formulario:cursosTable"
-                         onclick="PF('confirmacaoExclusao').hide();"
-                         action="#{manterCursoBean.excluir}" process="@this"/>
+        <p:commandButton icon="pi pi-thumbs-up" value="Sim"
+                 action="#{manterCursoBean.excluir}"
+                 process="@form"
+                 update=":formulario:cursosTable :formulario:growl"
+                 oncomplete="PF('confirmacaoExclusao').hide();" />
       </p:confirmDialog>
 
     </h:form>

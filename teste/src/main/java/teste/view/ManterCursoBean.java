@@ -39,8 +39,6 @@ public class ManterCursoBean implements Serializable {
 	
 	private Curso curso = new Curso();
 	private List<Curso> cursos = new ArrayList<>();
-	
-	// Novo atributo para armazenar o curso selecionado na tabela
 	private Curso cursoSelecionado;
 
 	@PostConstruct
@@ -53,14 +51,16 @@ public class ManterCursoBean implements Serializable {
 	public void salvar() {
 		log.info(curso.toString());
 		manterCursoService.salvar(curso);
-		
-		FacesContext.getCurrentInstance().
-        addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
-        		"O curso foi gravado com sucesso!", 
-        		curso.toString()));
-		
+
+		this.cursos = manterCursoService.buscarTodos();
+
+		FacesContext.getCurrentInstance().addMessage(null, 
+			new FacesMessage(FacesMessage.SEVERITY_INFO, 
+				"O curso foi gravado com sucesso!", curso.toString()));
+
 		log.info("curso: " + curso.toString());
 	}
+
 	
 	public void excluir() {
 		try {
@@ -69,15 +69,18 @@ public class ManterCursoBean implements Serializable {
 			FacesContext.getCurrentInstance().addMessage(null, 
 					new FacesMessage(FacesMessage.SEVERITY_INFO,
 							"Curso " + curso.getNome() + " excluído com sucesso.", null));
-			log.info("curso excluido = " + curso.getNome());
-			
+		} catch (RuntimeException e) {
+			FacesContext.getCurrentInstance().addMessage(null, 
+					new FacesMessage(FacesMessage.SEVERITY_WARN,
+							e.getMessage(), null));
 		} catch (Exception e) {
 			e.printStackTrace();
 			FacesContext.getCurrentInstance().addMessage(null, 
-			new FacesMessage(FacesMessage.SEVERITY_ERROR,
-					"Ocorreu um problema", null));
+					new FacesMessage(FacesMessage.SEVERITY_ERROR,
+							"Ocorreu um problema ao excluir o curso.", null));
 		}
 	}
+
 		
 	public void limpar() {
 		this.curso = new Curso();

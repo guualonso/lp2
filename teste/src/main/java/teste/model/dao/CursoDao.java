@@ -35,10 +35,15 @@ public class CursoDao implements Serializable {
     @Transactional
     public void excluir(Curso curso) throws PersistenceException {
         log.info("Excluindo curso: " + curso);
-        
+
         try {
             Curso cursoParaExcluir = manager.find(Curso.class, curso.getId());
+            
             if (cursoParaExcluir != null) {
+                cursoParaExcluir.getDisciplinas().clear();
+                manager.merge(cursoParaExcluir);
+                manager.flush();
+
                 manager.remove(cursoParaExcluir);
                 manager.flush();
             } else {
@@ -49,6 +54,7 @@ public class CursoDao implements Serializable {
             throw e;
         } 
     }
+
     
     public Curso buscarPeloCodigo(Long id) {
 		log.debug("Buscando curso pelo código: " + id);
